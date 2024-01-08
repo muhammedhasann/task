@@ -14,17 +14,23 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
+model task {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  completed   Boolean   @default(false)
+  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId  Int
 }
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  color String
+  tasks Task[]
+}
+
 
 // Necessary for Next auth
 model Account {
@@ -61,7 +67,6 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
 }
 
 model VerificationToken {
